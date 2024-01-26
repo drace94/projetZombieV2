@@ -22,7 +22,7 @@ N_x = 20
 N_y = 20
 
 # Parameters of heat equation
-dt = 1e-4
+dt = 1e-3
 alpha = 1.0e-1
 L = 1.0
 domain_x = [-L/2.0,L/2.0]
@@ -75,12 +75,12 @@ t_final = 100.0
 alpha = 5.0e-2
 p = 1.0e-3
 
-t_affichage = range(0.0,t_final,N_save+1)
+t_affichage = range(0.0,t_final,N_save+2)
 
 while t < t_final
     
     # Splitting : S-I-R ODEs then heat
-    @turbo for i=1:N_x * N_y
+    for i=1:N_x * N_y
         global S_[i,:] = RK4(p, alpha, [Sⁿ[i],Iⁿ[i],Rⁿ[i]], dt)
     end
 
@@ -93,6 +93,8 @@ while t < t_final
     global Sⁿ = copy(S_[:,1])
     global Iⁿ = copy(S_[:,2])
     global Rⁿ = copy(S_[:,3])
+
+    print(size(Sⁿ))
 
     if t_save > t_final / N_save
         println(((t / t_final) * 100),"% de la run effectuée (sauvegarde)")
