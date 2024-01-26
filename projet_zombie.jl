@@ -1,17 +1,10 @@
 using LoopVectorization, CairoMakie, Printf, LinearAlgebra, ToeplitzMatrices
 
-function f1(p, alpha, uⁿ)
-    return -p*uⁿ[1]*uⁿ[2]
+function f(p, alpha, uⁿ)
+    return [-p*uⁿ[1]*uⁿ[2], p*uⁿ[1]*uⁿ[2] - alpha*uⁿ[2], alpha*uⁿ[2]]
 end
 
-function f2(p, alpha, uⁿ)
-    return p*uⁿ[1]*uⁿ[2] - alpha*uⁿ[2]
-
-function f3(p, alpha, uⁿ)
-    return alpha*uⁿ[2]
-end
-
-function RK4(p, alpha, uⁿ, dt, f)
+function RK4(p, alpha, uⁿ, dt)
     k1 = f(p, alpha, uⁿ)
     k2 = f(p, alpha, uⁿ .+ (dt / 2.0) .* k1)
     k3 = f(p, alpha, uⁿ .+ (dt / 2.0) .* k2)
@@ -105,8 +98,8 @@ while t < t_final
         println(((t / t_final) * 100),"% de la run effectuée (sauvegarde)")
         global index_save += 1
         global t_save = 0.0
-        S[:,index_save] = copy(Sⁿ)
-        I[:,index_save] = copy(Iⁿ)
-        R[:,index_save] = copy(Rⁿ)
+        global S[:,index_save] = copy(Sⁿ)
+        global I[:,index_save] = copy(Iⁿ)
+        global R[:,index_save] = copy(Rⁿ)
     end
 end
