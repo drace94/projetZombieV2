@@ -10,7 +10,7 @@ L'équation de la chaleur résolue est la suivante :
     u(t,-L/2) = u(t,L/2)
 \end{cases}
 ```
-où $u\in\{S,I,R\}$. Cette équation est resolue à chaque itération en temps avec un schéma aux différences finies en espace et Crank-Nicholson en temps. \\
+où $u\in\{S,I,R\}$. Cette équation est resolue à chaque itération en temps avec un schéma aux différences finies en espace et Crank-Nicholson en temps. \
 
 Le système SIR s'écrit de la façon suivante :
 ```math
@@ -21,4 +21,8 @@ Le système SIR s'écrit de la façon suivante :
 \end{cases}
 ```
 
-Le schéma utilisé pour résoudre en temps est RK4. Ainsi, à chaque itération en temps, on résoud $N_x.N_y$ systèmes SIR et 3 équations de la chaleur.
+Le schéma utilisé pour résoudre en temps est RK4. Ainsi, à chaque itération en temps, on résoud $N_x.N_y$ systèmes SIR et 3 équations de la chaleur. \
+Pour lancer le code il faut écrire :
+```
+julia projet_zombie.jl
+```
