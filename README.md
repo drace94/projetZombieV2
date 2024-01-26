@@ -10,7 +10,7 @@ L'équation de la chaleur résolue est la suivante :
     u(t,-L/2) = u(t,L/2)
 \end{cases}
 ```
-où $u\in\{S,I,R\}$. Cette équation est resolue à chaque itération en temps avec un schéma aux différences finies en espace et Crank-Nicholson en temps. \
+où $u\in\{S,I,R\}$. Cette équation est resolue à chaque itération en temps avec un schéma aux différences finies en espace et Crank-Nicholson en temps.
 
 Le système SIR s'écrit de la façon suivante :
 ```math

@@ -1,5 +1,5 @@
 include("Projet_Zombie_lib.jl")
-using LoopVectorization, CairoMakie, Printf, LinearAlgebra, ToeplitzMatrices
+using LoopVectorization, CairoMakie, Printf, LinearAlgebra, ToeplitzMatrices, JLD
 
 # Spatial domain
 N_x = 20
@@ -61,7 +61,7 @@ p = 1.0e-3
 
 t_affichage = range(0.0,t_final,N_save+1)
 
-while t < t_final
+@time while t < t_final
     
     # Splitting : S-I-R ODEs then heat
     for i=1:N_x * N_y
@@ -72,13 +72,17 @@ while t < t_final
         global S_[:,i] = iter_heat(A,B,S_[:,i])
     end
 
+    if t + dt >= t_final
+       global dt = t_final - t
+    end
+
     global t += dt
     global t_save += dt
     global Sⁿ = copy(S_[:,1])
     global Iⁿ = copy(S_[:,2])
     global Rⁿ = copy(S_[:,3])
 
-    if t_save > t_final / N_save
+    if t_save > t_final / 10.0
         println(((t / t_final) * 100),"% de la run effectuée (sauvegarde)")
         global index_save += 1
         global t_save = 0.0
@@ -87,3 +91,9 @@ while t < t_final
         global R[:,index_save] = copy(Rⁿ)
     end
 end
+
+save("sauvegardes/sains.jld","S",S)
+save("sauvegardes/infectes.jld","I",I)
+save("sauvegardes/proteges.jld","R",R)
+
+println("Matrice sauvegardées, vous pouvez passer sur le code postpro")
