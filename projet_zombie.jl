@@ -48,9 +48,9 @@ first_column_B[end] = alpha * dt  / (2.0 * dx ^ 2)
 B = Circulant(first_column_B)
 
 # Array to keep values
-S = zeros(N_x * N_y, N_save)
-I = zeros(N_x * N_y, N_save)
-R = zeros(N_x * N_y, N_save)
+S = zeros(N_x * N_y, N_save + 1)
+I = zeros(N_x * N_y, N_save + 1)
+R = zeros(N_x * N_y, N_save + 1)
 
 # Init
 S₀ = zeros(N_x * N_y)
@@ -75,7 +75,7 @@ t_final = 100.0
 alpha = 5.0e-2
 p = 1.0e-3
 
-t_affichage = range(0.0,t_final,N_save+2)
+t_affichage = range(0.0,t_final,N_save+1)
 
 while t < t_final
     
@@ -93,8 +93,6 @@ while t < t_final
     global Sⁿ = copy(S_[:,1])
     global Iⁿ = copy(S_[:,2])
     global Rⁿ = copy(S_[:,3])
-
-    print(size(Sⁿ))
 
     if t_save > t_final / N_save
         println(((t / t_final) * 100),"% de la run effectuée (sauvegarde)")
