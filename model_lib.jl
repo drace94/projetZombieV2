@@ -79,7 +79,8 @@ function run(;scheme_param, model_param, U₀, Δtₛ, tₑ)
         if tᵢ + Δt < tₑ
             tᵢ += Δt
         else
-            tᵢ = tₑ
+            Δt = tₑ - tᵢ
+            tᵢ += Δt
         end
         # solve SIR model + heat equation
         Uⁿ = compute_sir(Nx², β, γ, Δt, Uⁿ)
