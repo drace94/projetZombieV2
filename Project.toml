@@ -1,0 +1,8 @@
+name = "ZombiesProject"
+uuid = "3a2048b4-1d28-4b55-b412-dce54585a450"
+authors = ["valayer "]
+version = "0.1.0"
+
+[deps]
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+ToeplitzMatrices = "c751599d-da0a-543b-9d20-d0a503d91d24"
