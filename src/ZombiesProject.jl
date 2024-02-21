@@ -46,24 +46,24 @@ function centered_fd_system(Nx::Int64, Nx²::Int64, Δx::Float64, Δt::Float64, 
     # create matrices A and B using Circulant() function
     # !!! TO BE FIXED !!!
     A₁ = zeros(Nx²)
-    A₁[1     ] = ζ
-    A₁[2     ] = -μ
-    A₁[Nx    ] = -μ
-    A₁[end-Nx] = -μ
-    A₁[end   ] = -μ
+    A₁[1         ] = ζ
+    A₁[2         ] = -μ
+    A₁[Nx+1      ] = -μ
+    A₁[end-(Nx-1)] = -μ
+    A₁[end       ] = -μ
     A = Circulant(A₁)
     B₁ = zeros(Nx²)
-    B₁[1     ] = η
-    B₁[2     ] = μ
-    B₁[Nx    ] = μ
-    B₁[end-Nx] = μ
-    B₁[end   ] = μ
+    B₁[1         ] = η
+    B₁[2         ] = μ
+    B₁[Nx+1      ] = μ
+    B₁[end-(Nx-1)] = μ
+    B₁[end       ] = μ
     B = Circulant(B₁)
     return A, B
 end
 
 # solve heat equation on each variables of Uⁿ at time tⁿ
-function compute_heat(A::ToeplitzMatrices.Circulant{Float64}, B::ToeplitzMatrices.Circulant{Float64}, Uⁿ::Vector{Vector{Float64}})
+function compute_heat(A::ToeplitzMatrices.Circulant{Float64, Vector{Float64}}, B::ToeplitzMatrices.Circulant{Float64, Vector{Float64}}, Uⁿ::Vector{Vector{Float64}})
     for i=1:3
         Uⁿ[i] = A \ (B * Uⁿ[i])
     end
