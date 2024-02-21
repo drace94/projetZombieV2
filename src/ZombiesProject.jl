@@ -36,24 +36,28 @@ function compute_sir(Nx²::Int64, β::Float64, γ::Float64, Δt::Float64, Uⁿ::
     return Uⁿ
 end
 
-# heat equation dUⁿ/dt = α * d²Uⁿ/dx² associated FD linear system Auⁿ⁺¹ = Buⁿ
-function centered_fd_system(Nx²::Int64, Δx::Float64, Δt::Float64, α::Float64)
+# heat equation dUⁿ/dt = ν(d²Uⁿ/dx² + d²Uⁿ/dx²) associated FD linear system Auⁿ⁺¹ = Buⁿ
+function centered_fd_system(Nx::Int64, Nx²::Int64, Δx::Float64, Δt::Float64, ν::Float64)
+    # compute Courant number μ = νΔt / 2Δx²
+    μ = 0.5 * ν * Δt / Δx^2
+    # introduce shorthands ζ = 1 + 4μ and η = 1 - 4μ
+    ζ = 1 + 4 * μ
+    η = 1 - 4 * μ
     # create matrices A and B using Circulant() function
-    Nx = Int(round(sqrt(Nx²)))
     # !!! TO BE FIXED !!!
     A₁ = zeros(Nx²)
-    A₁[1     ] = 1. + 2. * α * Δt / (Δx^2)
-    A₁[2     ] = - α * Δt / (2. * Δx^2)
-    A₁[Nx+1  ] = - α * Δt / (2. * Δx^2)
-    A₁[end-Nx] = - α * Δt / (2. * Δx^2)
-    A₁[end   ] = - α * Δt / (2. * Δx^2)
+    A₁[1     ] = ζ
+    A₁[2     ] = -μ
+    A₁[Nx    ] = -μ
+    A₁[end-Nx] = -μ
+    A₁[end   ] = -μ
     A = Circulant(A₁)
     B₁ = zeros(Nx²)
-    B₁[1     ] = 1. - 2. * α * Δt / Δx^2
-    B₁[2     ] = α * Δt / (2. * Δx^2)
-    B₁[Nx+1  ] = α * Δt / (2. * Δx^2)
-    B₁[end-Nx] = α * Δt / (2. * Δx^2)
-    B₁[end   ] = α * Δt / (2. * Δx^2)
+    B₁[1     ] = η
+    B₁[2     ] = μ
+    B₁[Nx    ] = μ
+    B₁[end-Nx] = μ
+    B₁[end   ] = μ
     B = Circulant(B₁)
     return A, B
 end
@@ -75,14 +79,14 @@ function run(; scheme_param::Tuple{Int64,Float64,Float64}, model_param::Vector{F
     Nx, Δx, Δt = scheme_param
     α, β, γ = model_param
     Uⁿ = copy(U₀)
-    Nx² = Int(Nx^2)
+    Nx² = Int(round(Nx^2))
     # manual save of initial state into time series
     tₛ = [tᵢ]
     Sₛ = [U₀[1]]
     Iₛ = [U₀[2]]
     Rₛ = [U₀[3]]
     # iterate over time
-    A, B = centered_fd_system(Nx², Δx, Δt, α)
+    A, B = centered_fd_system(Nx, Nx², Δx, Δt, α)
     while tᵢ < tₑ
         # solve SIR model + heat equation
         Uⁿ = compute_sir(Nx², β, γ, Δt, Uⁿ)
