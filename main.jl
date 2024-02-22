@@ -13,7 +13,7 @@ Nx = 51
 Δt = 1e-2
 scheme_param = (Nx, Δx, Δt)     # pass by tuple as mixed types Int64/Float64
 
-# model parameters
+# Model Parameters
 # 1. heat equation thermal diffusivity α
 α = 2e-5
 # 2. SIR model infection rate β, recovery rate γ
